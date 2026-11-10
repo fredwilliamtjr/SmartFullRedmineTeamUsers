@@ -111,3 +111,7 @@ Redmine de teste e numa cópia do banco de produção (MySQL 8.0.44).
 | Admin marcado para a lista dele | Não aparece; desativar dá 404 |
 | Admin desliga a opção | Botão some; páginas e ações dão 403 |
 | Primeiro login da conta nova | Obrigado a trocar a senha |
+
+## Licença
+
+GPL v2 — a mesma do Redmine. Veja [LICENSE](LICENSE).
