@@ -1,0 +1,55 @@
+<div class="contextual">
+  <%= link_to sprite_icon('add', l(:label_smartfull_team_users_new)), new_smartfull_user_path,
+              class: 'icon icon-add' %>
+</div>
+
+<h2><%= l(:label_smartfull_users) %></h2>
+
+<% if @users.empty? %>
+  <p class="nodata"><%= l(:text_smartfull_users_empty) %></p>
+<% else %>
+  <div class="autoscroll">
+    <table class="list users">
+      <thead>
+        <tr>
+          <th><%= l(:field_login) %></th>
+          <th><%= l(:field_name) %></th>
+          <th><%= l(:field_mail) %></th>
+          <th><%= l(:label_smartfull_users_projects) %></th>
+          <th><%= l(:field_status) %></th>
+          <th><%= l(:field_last_login_on) %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr class="<%= cycle('odd', 'even') %><%= ' locked' if user.locked? %>">
+            <td class="username"><%= h(user.login) %></td>
+            <td class="name"><%= user.name %></td>
+            <td class="email"><%= mail_to(user.mail) %></td>
+            <td>
+              <% (@memberships[user.id] || []).sort_by { |m| m.project.lft }.each do |m| %>
+                <span class="block"><%= link_to_project(m.project) %> (<%= m.roles.map(&:name).join(', ') %>)</span>
+              <% end %>
+            </td>
+            <td><%= l("status_#{User::LABEL_BY_STATUS[user.status]}") %></td>
+            <td><%= user.last_login_on ? format_time(user.last_login_on) : '-' %></td>
+            <td class="buttons">
+              <%= link_to sprite_icon('edit', l(:button_edit)), edit_smartfull_user_path(user), class: 'icon icon-edit' %>
+              <% if user.locked? %>
+                <%= link_to sprite_icon('unlock', l(:button_smartfull_unlock)), unlock_smartfull_user_path(user),
+                            method: :post, class: 'icon icon-unlock' %>
+              <% else %>
+                <%= link_to sprite_icon('lock', l(:button_smartfull_lock)), lock_smartfull_user_path(user),
+                            method: :post, class: 'icon icon-lock',
+                            data: { confirm: l(:text_smartfull_lock_confirm, name: user.name) } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<p class="info"><%= l(:text_smartfull_users_info) %></p>

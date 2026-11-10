@@ -1,0 +1,13 @@
+<h2><%= link_to l(:label_smartfull_users), smartfull_users_path %> » <%= @user.login %></h2>
+
+<% if @allowed_roles.empty? %>
+  <p class="nodata"><%= l(:text_smartfull_team_users_no_roles_configured) %></p>
+<% else %>
+  <%= labelled_form_for :user, @user,
+        url: smartfull_user_path(@user), method: :patch,
+        html: { id: 'smartfull-edit-user-form' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <p class="info"><%= l(:text_smartfull_edit_user_info) %></p>
+    <%= submit_tag l(:button_save) %>
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<% if User.current.admin? && user.persisted? %>
+  <p>
+    <%= label_tag 'smartfull_can_create_users', l(:field_smartfull_can_create_users) %>
+    <%= hidden_field_tag 'smartfull_can_create_users', '0', id: nil %>
+    <%= check_box_tag 'smartfull_can_create_users', '1',
+          RedmineSmartfullTeamUsers.enabled_for?(user), id: 'smartfull_can_create_users' %>
+    <em class="info"><%= l(:text_smartfull_can_create_users_info) %></em>
+  </p>
+  <%
+    current_manager_id = RedmineSmartfullTeamUsers.manager_id(user)
+    managers = RedmineSmartfullTeamUsers.enabled_users.reject { |u| u.id == user.id }
+    current_manager = current_manager_id && User.find_by(id: current_manager_id)
+    managers |= [current_manager] if current_manager && current_manager.id != user.id
+  %>
+  <p>
+    <%= label_tag 'smartfull_manager_id', l(:field_smartfull_manager) %>
+    <%= select_tag 'smartfull_manager_id',
+          options_for_select([[l(:label_none), '']] + managers.map { |u| [u.name, u.id] },
+                             current_manager_id),
+          id: 'smartfull_manager_id' %>
+    <em class="info"><%= l(:text_smartfull_manager_info) %></em>
+  </p>
+<% end %>

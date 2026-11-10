@@ -1,0 +1,33 @@
+<%= error_messages_for 'user' %>
+<div class="box tabular">
+  <p><%= f.text_field :firstname, required: true %></p>
+  <p><%= f.text_field :lastname, required: true %></p>
+  <p><%= f.text_field :mail, required: true %></p>
+  <% if @user.new_record? %>
+    <p>
+      <%= f.text_field :login, size: 25 %>
+      <em class="info"><%= l(:text_smartfull_team_users_login_info) %></em>
+    </p>
+  <% else %>
+    <p><label><%= l(:field_login) %></label><%= @user.login %></p>
+  <% end %>
+  <p>
+    <label><%= l(:label_role_plural) %><span class="required"> *</span></label>
+    <% @allowed_roles.each do |role| %>
+      <label class="block">
+        <%= check_box_tag 'role_ids[]', role.id, @role_ids.include?(role.id), id: "role_ids_#{role.id}" %>
+        <%= role.name %>
+      </label>
+    <% end %>
+    <em class="info"><%= l(:text_smartfull_team_users_roles_info) %></em>
+  </p>
+  <p>
+    <label><%= l(:label_project_plural) %><span class="required"> *</span></label>
+    <% @available_projects.each do |project| %>
+      <label class="block">
+        <%= check_box_tag 'project_ids[]', project.id, @project_ids.include?(project.id), id: "project_ids_#{project.id}" %>
+        <%= project.parent ? "#{project.parent.name} » #{project.name}" : project.name %>
+      </label>
+    <% end %>
+  </p>
+</div>

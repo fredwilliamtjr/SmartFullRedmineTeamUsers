@@ -1,0 +1,15 @@
+<h2><%= link_to l(:label_smartfull_users), smartfull_users_path %> » <%= l(:label_smartfull_team_users_new) %></h2>
+
+<% if @allowed_roles.empty? %>
+  <p class="nodata"><%= l(:text_smartfull_team_users_no_roles_configured) %></p>
+<% elsif @available_projects.empty? %>
+  <p class="nodata"><%= l(:text_smartfull_team_users_no_projects) %></p>
+<% else %>
+  <%= labelled_form_for :user, @user,
+        url: smartfull_users_path, method: :post,
+        html: { id: 'smartfull-add-user-form' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <p class="info"><%= l(:text_smartfull_team_users_info) %></p>
+    <%= submit_tag l(:button_create) %>
+  <% end %>
+<% end %>

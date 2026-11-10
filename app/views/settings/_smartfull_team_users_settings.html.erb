@@ -1,0 +1,26 @@
+<% selected = Array(settings['role_ids']).map(&:to_i) %>
+<p><%= l(:text_smartfull_team_users_settings_info) %></p>
+<div class="box tabular">
+  <p>
+    <label><%= l(:label_smartfull_team_users_allowed_roles) %></label>
+    <%= hidden_field_tag 'settings[role_ids][]', '', id: nil %>
+    <% Role.givable.each do |role| %>
+      <label class="block">
+        <%= check_box_tag 'settings[role_ids][]', role.id, selected.include?(role.id), id: "settings_role_ids_#{role.id}" %>
+        <%= role.name %>
+      </label>
+    <% end %>
+  </p>
+  <p>
+    <label><%= l(:label_smartfull_team_users_enabled_users) %></label>
+    <% users = RedmineSmartfullTeamUsers.enabled_users %>
+    <% if users.any? %>
+      <% users.each do |u| %>
+        <span class="block"><%= link_to u.name, edit_user_path(u) %></span>
+      <% end %>
+    <% else %>
+      <em><%= l(:label_none) %></em>
+    <% end %>
+    <em class="info"><%= l(:text_smartfull_team_users_enabled_users_info) %></em>
+  </p>
+</div>
